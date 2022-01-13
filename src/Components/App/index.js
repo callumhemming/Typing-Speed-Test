@@ -123,6 +123,8 @@ function App() {
       ) : (
         <></>
       )}
+
+      <footer><a href="https://github.com/callumhemming/Typing-Speed-Test"><i>Check out the <u>source!</u> </i></a></footer>
     </div>
   );
 }
