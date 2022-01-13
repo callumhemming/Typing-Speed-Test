@@ -13,9 +13,9 @@ function App() {
   const [textInput, setTextInput] = useState(""); //,/
   const [timeout, setTimeout] = useState(false); //,/
   const [arrayOfScores, setArrayOfScores] = useState([]); //commented for testing
-  const [pageOne, setPageOne] = useState(true);
+  const [pageOne, setPageOne] = useState(false);
   const [pageTwo, setPageTwo] = useState(false);
-  // const [start, setStart] = useState(true);
+  const [start, setStart] = useState(true);
 
   const [result, setResult] = useState({});
 
@@ -86,10 +86,11 @@ function App() {
 
   return (
     <div className="container">
-      {/* {start? <button onClick={(e)=>{
+      {start? <button onClick={(e)=>{
         e.preventDefault()
-        set
-      }}>Start</button> : <></>} */}
+        setStart(false)
+        setPageOne(true)
+      }}>Start</button> : <></>}
 
       {pageOne ? <Timer timeout={timeout} setTimeout={setTimeout} /> : <></>}
       {pageOne ? (
