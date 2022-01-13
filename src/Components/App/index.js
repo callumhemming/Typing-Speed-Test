@@ -1,47 +1,31 @@
-//THIS IS A TEST
+//To fix:
+//If timer runs out mid sentance response is not recorded
+//
 import React, { useState, useEffect, useReducer } from "react";
 import "./App.css";
 import Input from "../Input";
 import Timer from "../Timer";
 import Dummy from "../Dummy";
 
-
-
-const numbers= [2,23,124,253,4563,5645,77,5] // Add them all up 
-
-
-
 //const dummyPhrases = dummyPhrases
 
 function App() {
   const [textInput, setTextInput] = useState(""); //,/
   const [timeout, setTimeout] = useState(false); //,/
-  // const [arrayOfScores, setArrayOfScores] = useState([]); //commented for testing
+  const [arrayOfScores, setArrayOfScores] = useState([]); //commented for testing
   const [pageOne, setPageOne] = useState(true);
   const [pageTwo, setPageTwo] = useState(false);
   // const [start, setStart] = useState(true);
 
   const [result, setResult] = useState({});
 
-  const [arrayOfScores, setArrayOfScores] = useState([
-    {
-      correct:
-        "The delicious aroma from the kitchen was ruined by cigarette smoke.",
-      user: "The delicious",
-    },
-
-    {
-      correct:
-        "The manager of the fruit stand always sat and only sold vegetables.",
-      user: "",
-    },
-
-    {
-      correct:
-        "He was the type of guy who liked Christmas lights on his house in the middle of July.",
-      user: "",
-    },
-  ]);
+//   const [arrayOfScores, setArrayOfScores] = useState([
+//     {
+//       correct:
+//         "The delicious aroma from the kitchen was ruined by",
+//       user: "The delicious aroma from the",
+//     },
+// ]);
 
   function workOutScore() {
     const scores = [...arrayOfScores]; //Works
@@ -50,41 +34,38 @@ function App() {
     } // Works
 
     const totalWords = scores
-      .map(v => {
+      .map((v) => {
         return v.correct.split(" ");
       })
-      .map(v => {
+      .map((v) => {
         return v.length;
       })
       .reduce((a, b) => a + b); // Number of total words requested
 
     const rightWords = scores
-      .map(v => {
+      .map((v) => {
         const userAnswer = v.user.split(" "); // works
         return v.correct
           .split(" ")
           .map((v, i) => (v === userAnswer[i] ? 1 : 0)); // returns three arrays of ones and 0s
       })
-      .map(v => v.reduce((a, b) => a + b))
+      .map((v) => v.reduce((a, b) => a + b))
       .reduce((a, b) => a + b);
 
     let wrongWords = totalWords - rightWords;
 
-    //Accuracy = 100 - wrong/total*100
-    //Balanced wpm = Total - Accuracy (30-17%)
+    
 
-    //Adjusted (100-Accuracy)*rightWords
+    const Accuracy = ((rightWords / totalWords) * 100).toFixed(2)
 
-    const Accuracy = Math.floor(rightWords/totalWords)
-
-    const adjusted = (100 - Accuracy) * rightWords;
+    const adjusted = (rightWords - ((Accuracy/100).toFixed(2)*rightWords)).toFixed(2)
 
     setResult({
       ...result,
       wrong: wrongWords,
       right: rightWords,
-      Accuracy: Accuracy,
-      adjusted: adjusted,
+      Accuracy: `${Accuracy}%`,
+      adjusted: `${adjusted}wpm`,
     });
   } //Function end
 
@@ -105,8 +86,6 @@ function App() {
 
   return (
     <div className="container">
-      
-
       {/* {start? <button onClick={(e)=>{
         e.preventDefault()
         set

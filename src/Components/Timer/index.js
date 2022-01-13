@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 export default function Timer({ timeout, setTimeout }) {
   //config\\
-  const __default_time = 30;
+  const __default_time = 60;
   const __speed = 1000;
   //config\\
 
