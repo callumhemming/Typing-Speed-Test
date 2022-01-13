@@ -69,13 +69,15 @@ function App() {
     });
   } //Function end
 
-  useEffect(() => {
-    if (!timeout) return;
+  function collectLeftovers(currentString){
 
+    setArrayOfScores([...arrayOfScores,{ correct: currentString.join(""), user: textInput } ]);
     setPageOne(false);
     workOutScore();
     setPageTwo(true);
-  }, [timeout]);
+  }
+
+
 
   // useEffect(()=>{
   //   if(result === {})return
@@ -94,10 +96,12 @@ function App() {
       {pageOne ? <Timer timeout={timeout} setTimeout={setTimeout} /> : <></>}
       {pageOne ? (
         <Dummy
+          timeout={timeout}
           textInput={textInput}
           setTextInput={setTextInput}
           arrayOfScores={arrayOfScores}
           setArrayOfScores={setArrayOfScores}
+          collectLeftovers={collectLeftovers}
         />
       ) : (
         <></>

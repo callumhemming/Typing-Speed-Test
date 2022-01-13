@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import {v4 as uuidv4} from "uuid"
 
 export default function Dummy({
@@ -7,6 +7,7 @@ export default function Dummy({
   timeout,
   arrayOfScores,
   setArrayOfScores,
+  collectLeftovers
 }) {
   const [dummy, setDummy] = useState([
     "The delicious aroma from the kitchen was ruined by cigarette smoke.",
@@ -50,6 +51,12 @@ export default function Dummy({
     }
   });
 
+  useEffect(()=>{
+    if (!timeout)return
+
+    collectLeftovers(randomSent)
+
+  },[timeout])
 
 useEffect(()=>{
     
