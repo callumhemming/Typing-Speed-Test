@@ -1,7 +1,45 @@
-import React, { useState, useEffect } from "react";
-import {v4 as uuidv4} from "uuid"
+import React, { useState, useEffect, useReducer } from "react";
+import { sentances } from "./libs/data.jsm";
+import { reduceToLetterColour } from "./libs/actions.js";
+// import {reduceToLetterColour, reduceSentanceLogic} from "./libs/actions.js"
 
-//Change for the commit
+
+  // state = {
+  //   previousSentances: [
+  //     { Text: "Sentance", Length: 1 },
+  //     { Text: "Sentance", Length: 1 },
+  //   ],
+  //   totalLength: 1,
+  //   currentSentance: { split: ["", "", "", ""], joined: "" },
+  // };
+
+function reduceSentanceLogic(state, action) {
+      const { previousSentances, currentSentance, totalLength } = state;
+      const { type } = action;
+
+      const getUniqueSentance = (history) => {
+        const generateNewSentance =
+          sentances[Math.floor(Math.random() * sentances.length)];
+        const reduceHistory = history.reduce((a, b) => {
+          return [...a, b.text];
+        }, []);
+
+        if (reduceHistory.indexOf(generateNewSentance) != -1) {
+          return getUniqueSentance(history);
+        } else {
+          return generateNewSentance;
+        }
+      };
+
+      const oldSentance = {
+        text: currentSentance.joined,
+        length: currentSentance.joined.length,
+      };
+      const newSentanceHistory = [...previousSentances, oldSentance];
+
+      const newSentance = getUniqueSentance(newSentanceHistory);
+
+}
 
 export default function Dummy({
   textInput,
@@ -10,19 +48,18 @@ export default function Dummy({
   arrayOfScores,
   setArrayOfScores,
 }) {
-  const [dummy, setDummy] = useState([
-    "The delicious aroma from the kitchen was ruined by cigarette smoke.",
-    "The manager of the fruit stand always sat and only sold vegetables.",
-    "He was the type of guy who liked Christmas lights on his house in the middle of July.",
-    "When nobody is around, the trees gossip about the people who have walked under them.",
-    "If eating three-egg omelets causes weight-gain, budgie eggs are a good substitute.",
-    "Excitement replaced fear until the final moment.",
-    "The green tea and avocado smoothie turned out exactly as would be expected.",
-    "The swirled lollipop had issues with the pop rock candy.",
-    "I may struggle with geography, but I'm sure I'm somewhere around here.",
-    "Check back tomorrow; I will see if the book has arrived.",
-    "He had a vague sense that trees gave birth to dinosaurs.",
-  ]);
+  //useEffect
+  // const [sentances, dispatch] = useReducer(reducer, sentances)
+
+  const [letterColor, getLetterColour] = useReducer(reduceToLetterColour, {
+    payload: "",
+  });
+
+  const [sentanceData, getSentanceData] = useReducer(reduceSentanceLogic, {
+    payload: "",
+  });
+
+  // const dummyData =
 
   const [randomSent, setRandomSent] = useState(
     dummy[Math.floor(Math.random() * dummy.length)].split("")
@@ -30,40 +67,27 @@ export default function Dummy({
 
   //Render sentence and change background colour depending on user input(UGLY)
   const display = randomSent.map((v, i) => {
-    if (textInput[i] == null)
-      return v === " " ? (
-        <p key={uuidv4()} style={{ backgroundColor: "white", whiteSpace: "pre" }}> {v}</p>
-      ) : (
-        <p key={uuidv4()} style={{ backgroundColor: "white" }}> {v}</p>
-      );
-
-    if (textInput[i] != v) {
-      return v === " " ? (
-        <p key={uuidv4()} style={{ backgroundColor: "red", whiteSpace: "pre" }}> {v}</p>
-      ) : (
-        <p key={uuidv4()} style={{ backgroundColor: "red" }}> {v}</p>
-      );
-    } else {
-      return v === " " ? (
-        <p key={uuidv4()} style={{ backgroundColor: "green", whiteSpace: "pre" }}> {v}</p>
-      ) : (
-        <p key={uuidv4()} style={{ backgroundColor: "green" }}> {v}</p>
-      );
-    }
+    const { payload } = getLetterColour({
+      characterAtIndex: v,
+      usersCharacterAtIndex: textInput[i],
+    });
+    return payload;
   });
 
+  useEffect(() => {
+    if (textInput.length == display.length) {
+      setArrayOfScores([
+        ...arrayOfScores,
+        { correct: randomSent.join(""), user: textInput },
+      ]);
+      setTextInput("");
+      setRandomSent(dummy[Math.floor(Math.random() * dummy.length)].split(""));
 
-useEffect(()=>{
-    
-    if(textInput.length == display.length){
-      setArrayOfScores([...arrayOfScores,{ correct: randomSent.join(""), user: textInput } ]);
-      setTextInput("")
-      setRandomSent(dummy[Math.floor(Math.random() * dummy.length)].split(""))
+      console.log(arrayOfScores);
+    } else {
+      return;
+    }
+  }, [textInput]);
 
-    console.log(arrayOfScores);
-    }else{return}
-    },[textInput])
-
-  
   return <div style={{ display: "flex", flexDirection: "row" }}>{display}</div>;
 }
