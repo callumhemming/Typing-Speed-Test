@@ -2,17 +2,26 @@ import { v4 as uuidv4 } from "uuid";
 import { sentances } from "./data.js";
 import React from "react";
 
-const INIT_SENTANCE_STATE = {
-  previousSentances: [{ split: ["BOOT"], Length: 0, joined: "BOOT" }],
-  currentSentance: { split: ["STRAP"], Length: 0, joined: "STRAP" },
-  totalLength: 0,
-};
-
 export const actions = {
   GET_NEW_SENTANCE: {
+    INIT_SENTANCE_STATE: {
+      previousSentances: [],
+      currentSentance: { split: [], Length: 0, joined: "" },
+      totalLength: 0,
+    },
     NEW_SENTANCE: "NEW_SENTANCE",
     BOOTSTRAP_STATE: () => {
-      return reduceSentanceLogic(INIT_SENTANCE_STATE, { type: "NEW_SENTANCE" });
+      return reduceSentanceLogic(actions.GET_NEW_SENTANCE.INIT_SENTANCE_STATE, {
+        type: "NEW_SENTANCE",
+      });
+    },
+  },
+  GET_STYLE: {
+    BOOTSTRAP_STYLE: (currentSentanceSplit) => {
+      return reduceToLetterColour([], {
+        currentSentance: currentSentanceSplit,
+        textInput: "",
+      });
     },
   },
 };

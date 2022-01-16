@@ -1,14 +1,12 @@
 import React from "react";
 
 export default function Input({ setTextInput, value }){
-    
-    function onChange({ target: self }) {
-        setTextInput(self.value);
-      }
 
     return(
         <form>
-            <input value={value} onChange = {onChange} />
+            <input autoFocus value={value} onChange = {({target : thisInputBox})=>{
+                setTextInput(thisInputBox.value)
+            }} />
             
         </form>
     )

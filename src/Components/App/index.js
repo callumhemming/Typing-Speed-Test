@@ -19,13 +19,7 @@ function App() {
 
   const [result, setResult] = useState({});
 
-//   const [arrayOfScores, setArrayOfScores] = useState([
-//     {
-//       correct:
-//         "The delicious aroma from the kitchen was ruined by",
-//       user: "The delicious aroma from the",
-//     },
-// ]);
+
 
   function workOutScore() {
     const scores = [...arrayOfScores]; //Works
