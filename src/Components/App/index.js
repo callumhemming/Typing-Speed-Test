@@ -86,11 +86,15 @@ function App() {
 
   return (
     <div className="container">
-      {start? <button onClick={(e)=>{
+      {start? 
+      <div>
+      <h1>Hello world!</h1>
+      <button onClick={(e)=>{
         e.preventDefault()
         setStart(false)
         setPageOne(true)
-      }}>Start</button> : <></>}
+      }}>
+        Start</button></div> : <></>}
 
       {pageOne ? <Timer timeout={timeout} setTimeout={setTimeout} /> : <></>}
       {pageOne ? (
